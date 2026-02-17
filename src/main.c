@@ -57,7 +57,11 @@ int main(int argc, char **argv) {
     }
 
     while (zlex->current != '\0') {
-        printf("Reading characther: %c\n", zlex_advance(zlex));
+        zlex_skip_wspace(zlex);
+
+        printf("Reading char: %c\n", zlex->current);
+
+        zlex_advance(zlex);
     }
 
     zlex_free(zlex);

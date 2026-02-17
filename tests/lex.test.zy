@@ -1,13 +1,1 @@
-// Constant definitions
-// const float PI = 3.1415;
-
-// Variable definitions
-// let string myName = "Lucas";
-// let int myAge = 16;
-
-// Operators test
-// let int A = 10;
-// let int B = 10;
-
-// let int sum = A + B;
-// let int sub = A - B;
+const float pi = 3.14151;
