@@ -9,7 +9,7 @@ typedef enum {
 
 typedef struct {
     TokenType type;
-    char *zlexeme;
+    char *lexeme;
     int line;
     int column;
 

@@ -48,15 +48,19 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    ZLex *lex = zlex_init(src);
+    ZLex *zlex = zlex_init(src);
 
-    if (lex == NULL) {
+    if (zlex == NULL) {
         fprintf(stderr, "Could not initialize lexer");
         free(src);
         return 1;
     }
 
-    zlex_free(lex);
+    while (zlex->current != '\0') {
+        printf("Reading characther: %c\n", zlex_advance(zlex));
+    }
+
+    zlex_free(zlex);
     free(src);
 
     return 0;

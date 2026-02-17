@@ -38,10 +38,12 @@ void zlex_skip_wspace(ZLex *zlex) {
 }
 
 char zlex_advance(ZLex *zlex) {
-    if (zlex->pos >= zlex->src_length) return '\0';
+    if (zlex->pos >= zlex->src_length) {
+        zlex->current = '\0';
+        return '\0';
+    }
 
-    char c = zlex->src[zlex->pos];
-    zlex->pos++;
+    char c = zlex->src[zlex->pos++];
 
     if (c == '\n') {
         zlex->line++;
