@@ -62,7 +62,7 @@ Token *next_token(ZLex *zl) {
     
 }
 
-Token *zl(ZLex *zl) {
+Token *zl_lookahead(ZLex *zl) {
 
 }
 
@@ -71,7 +71,7 @@ Token *zlex_read(ZLex *zl) {
 }
 
 bool zlex_is_letter(char c) {
-    return (c != '\0') && (isalpha((unsigned char) c) || c == '_');
+    return (c != '\0') && isalpha((unsigned char) c);
 }
 
 bool zlex_is_digit(char c) {
