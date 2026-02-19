@@ -3,7 +3,30 @@
 #include <ctype.h>
 #include "zlex.h"
 
-Token *zlex_read_identifier(ZLex *zl);
+static bool is_letter(char c) {
+    return (c != '\0') && isalpha((unsigned char) c);
+}
+
+static bool is_digit(char c) {
+    return (c != '\0') && isdigit((unsigned char) c);
+}
+
+static bool is_alphanum(char c) {
+    return is_letter(c) || is_digit(c);
+}
+
+static void skip_whitespace(ZLex *zl) {
+    while (1) {
+        char c = zl->current;
+
+        if (
+            c != ' ' &&
+            c != '\n' &&
+            c != '\t' &&
+            c != '\t'
+        ) break;
+    }
+}
 
 ZLex *zlex_init(const char *src) {
     if (src == NULL) return NULL;
@@ -52,43 +75,24 @@ char zlex_peek(ZLex *zl) {
         : '\0';
 }
 
-void zlex_skip_whitespace(ZLex *zl) {
-    while (zlex_is_whitespace(zlex_peek(zl))) {
-        zlex_advance(zl);
-    }
-}
+Token *zlex_next_token(ZLex *zl) {
+    skip_whitespace(zl);
 
-Token *next_token(ZLex *zl) {
-    
-}
+    char c = zl->current;
 
-Token *zl_lookahead(ZLex *zl) {
+    if (is_letter(c) || c == '_') return zlex_read_identifier(zl);
 
-}
-
-Token *zlex_read(ZLex *zl) {
-        
-}
-
-bool zlex_is_letter(char c) {
-    return (c != '\0') && isalpha((unsigned char) c);
-}
-
-bool zlex_is_digit(char c) {
-    return (c != '\0') && isdigit((unsigned char) c);
-}
-
-bool zlex_is_alphanum(char c) {
-    return zlex_is_letter(c) || zlex_is_digit(c);
-}
-
-bool zlex_is_whitespace(char c) {
-    return c == ' ' ||
-           c == '\n' ||
-           c == '\t' ||
-           c == '\r';
+    return NULL;
 }
 
 Token *zlex_read_identifier(ZLex *zl) {
-    
+    Token *token = (Token *)malloc(sizeof(Token));
+
+    token->type = TK_IDENTIFIER;
+    token->line = zl->line;
+    token->column = zl->column;
+
+    while (is_alphanum(zlex_peek(zl))) zlex_advance(zl);
+
+    return token;
 }

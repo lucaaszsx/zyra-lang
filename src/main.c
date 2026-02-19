@@ -57,15 +57,17 @@ int main(int argc, char **argv) {
     }
 
     while (zlex->current != '\0') {
-        zlex_skip_whitespace(zlex);
-
         printf("Reading char: %c\n", zlex->current);
+
+        Token *tk = zlex_next_token(zlex);
+
+        if (tk != NULL) printf("Type: %d | Line: %d | Column: %d | Value: %s\n", tk->type, tk->line, tk->column, "test");
 
         zlex_advance(zlex);
     }
 
     zlex_free(zlex);
     free(src);
-
+    
     return 0;
 }
