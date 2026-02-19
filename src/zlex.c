@@ -15,16 +15,12 @@ static bool is_alphanum(char c) {
     return is_letter(c) || is_digit(c);
 }
 
-static void skip_whitespace(ZLex *zl) {
+static void zlex_skip_whitespace(ZLex *zl) {
     while (1) {
         char c = zl->current;
 
-        if (
-            c != ' ' &&
-            c != '\n' &&
-            c != '\t' &&
-            c != '\t'
-        ) break;
+        if (c == ' ' || c == '\n' || c == '\t' || c == '\r') zlex_advance(zl);
+        else break;
     }
 }
 
@@ -76,23 +72,41 @@ char zlex_peek(ZLex *zl) {
 }
 
 Token *zlex_next_token(ZLex *zl) {
-    skip_whitespace(zl);
+    zlex_skip_whitespace(zl);
 
-    char c = zl->current;
+    Token *token = (Token *)(malloc(sizeof(Token)));
 
-    if (is_letter(c) || c == '_') return zlex_read_identifier(zl);
+    if (token == NULL) return NULL;
 
-    return NULL;
-}
-
-Token *zlex_read_identifier(ZLex *zl) {
-    Token *token = (Token *)malloc(sizeof(Token));
-
-    token->type = TK_IDENTIFIER;
     token->line = zl->line;
     token->column = zl->column;
+    
+    char c = zlex_advance(zl);
 
-    while (is_alphanum(zlex_peek(zl))) zlex_advance(zl);
+    if (c == '\0') {
+        token->type = TK_EOF;
+        return token;
+    }
 
-    return token;
+    if ((c >= 'a' && c <= 'z') ||
+        (c >= 'A' && c <= 'Z') ||
+        (c == '_')) {
+        while (1) {
+            char n = zl->current;
+
+            if ((n >= 'a' && n <= 'z') ||
+                (n >= 'A' && n <= 'Z') ||
+                (n >= '0' && n <= '9') ||
+                (n == '_'))
+                zlex_advance(zl);
+            else
+                break;
+        }
+
+        token->type = TK_IDENTIFIER;
+        
+        return token;
+    }
+
+    return NULL;
 }

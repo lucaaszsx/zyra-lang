@@ -5,6 +5,7 @@
 #include <stddef.h>
 
 typedef enum {
+    TK_EOF = 0,
     TK_IDENTIFIER
 } TokenType;
 
