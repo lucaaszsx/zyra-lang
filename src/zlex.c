@@ -27,7 +27,7 @@ static void zlex_skip_whitespace(ZLex *zl) {
 ZLex *zlex_init(const char *src) {
     if (src == NULL) return NULL;
 
-    ZLex *zl = (ZLex *)malloc(sizeof(ZLex));
+    ZLex *zl = malloc(sizeof(ZLex));
 
     if (zl == NULL) return NULL;
 
@@ -57,7 +57,7 @@ char zlex_advance(ZLex *zl) {
 
     if (c == '\n') {
         zl->line++;
-        zl->column = 0;
+        zl->column = 1;
     } else zl->column++;
 
     zl->current = zl->src[zl->pos];
@@ -74,7 +74,7 @@ char zlex_peek(ZLex *zl) {
 Token *zlex_next_token(ZLex *zl) {
     zlex_skip_whitespace(zl);
 
-    Token *token = (Token *)(malloc(sizeof(Token)));
+    Token *token = malloc(sizeof(Token));
 
     if (token == NULL) return NULL;
 
